@@ -1,7 +1,10 @@
 apply plugin: 'java'
+apply plugin: 'checkstyle'
 
 sourceCompatibility = 1.7
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+checkstyle {
+    configFile rootProject.file('checkstyle.xml')
+    showViolations true
+    configProperties = ['checkstyle.cache.file': rootProject.file('build/checkstyle.cache')]
 }
