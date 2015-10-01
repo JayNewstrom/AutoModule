@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import javax.tools.JavaFileObject;
 
-import static com.google.common.truth.Truth.assert_;
+import static com.google.common.truth.Truth.assertAbout;
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 
 public final class AutoModuleProcessorTest {
@@ -36,7 +36,7 @@ public final class AutoModuleProcessorTest {
                         "final class MainActivityModule {",
                         "}"));
 
-        assert_().about(javaSource())
+        assertAbout(javaSource())
                  .that(sampleActivity)
                  .processedWith(new AutoModuleProcessor())
                  .compilesWithoutError()
@@ -70,7 +70,7 @@ public final class AutoModuleProcessorTest {
                         "final class MainActivityModule {",
                         "}"));
 
-        assert_().about(javaSource())
+        assertAbout(javaSource())
                  .that(sampleActivity)
                  .processedWith(new AutoModuleProcessor())
                  .compilesWithoutError()
