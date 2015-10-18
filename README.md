@@ -36,6 +36,26 @@ final class MainActivityModule {
 }
 ```
 
+Setup
+------------
+```groovy
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
+
+apply plugin: 'com.neenbedankt.android-apt'
+
+dependencies {
+    apt 'com.jaynewstrom:auto-module-processor:1.0.0'
+    compile 'com.jaynewstrom:auto-module:1.0.0'
+}
+```
+
 License
 -------
 
