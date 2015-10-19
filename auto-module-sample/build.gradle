@@ -48,13 +48,13 @@ android {
 
 configurations.all {
     resolutionStrategy {
-        force 'com.android.support:support-annotations:23.0.1'
+        force 'com.android.support:support-annotations:23.1.0'
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.squareup.dagger:dagger:1.2.2'
     apt 'com.squareup.dagger:dagger-compiler:1.2.2'
     compile project(':auto-module')
