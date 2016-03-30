@@ -3,6 +3,7 @@ package com.jaynewstrom.autoModuleProcessor;
 import com.google.auto.service.AutoService;
 import com.jaynewstrom.autoModule.AutoModule;
 import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 
@@ -62,11 +63,11 @@ public final class AutoModuleProcessor extends AbstractProcessor {
                 AnnotationSpec.Builder moduleAnnotation = AnnotationSpec.builder(Module.class)
                                                                         .addMember("injects", className + ".class");
 
-                moduleAnnotation.addMember("addsTo", getField("addsTo", instance));
+                moduleAnnotation.addMember("addsTo", "$T.class", ClassName.bestGuess(getField("addsTo", instance)));
 
                 TypeSpec autoModule = TypeSpec.classBuilder(className + "Module")
-                                              .addModifiers(Modifier.FINAL)
                                               .addAnnotation(moduleAnnotation.build())
+                                              .addModifiers(Modifier.FINAL)
                                               .build();
 
                 JavaFile javaFile = JavaFile.builder(classPackage, autoModule).build();
@@ -88,7 +89,7 @@ public final class AutoModuleProcessor extends AbstractProcessor {
         // example toString "@com.jaynewstrom.autoModule.AutoModule(addsTo=java.lang.Void)"
         // 3 because of the @, (, and =
         int startIndex = AutoModule.class.getName().length() + fieldName.length() + 3;
-        return instanceToString.substring(startIndex, instanceToString.length() - 1) + ".class";
+        return instanceToString.substring(startIndex, instanceToString.length() - 1);
     }
 
     private void error(Element e, String msg, Object... args) {
