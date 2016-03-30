@@ -51,8 +51,8 @@ buildscript {
 apply plugin: 'com.neenbedankt.android-apt'
 
 dependencies {
-    apt 'com.jaynewstrom:auto-module-processor:1.0.0'
-    compile 'com.jaynewstrom:auto-module:1.0.0'
+    apt 'com.jaynewstrom:auto-module-processor:1.0.1'
+    compile 'com.jaynewstrom:auto-module:1.0.1'
 }
 ```
 
