@@ -21,6 +21,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 
@@ -63,7 +65,7 @@ public final class AutoModuleProcessor extends AbstractProcessor {
                 AnnotationSpec.Builder moduleAnnotation = AnnotationSpec.builder(Module.class)
                                                                         .addMember("injects", className + ".class");
 
-                moduleAnnotation.addMember("addsTo", "$T.class", ClassName.bestGuess(getField("addsTo", instance)));
+                moduleAnnotation.addMember("addsTo", "$T.class", getAddsTo(instance));
 
                 TypeSpec autoModule = TypeSpec.classBuilder(className + "Module")
                                               .addAnnotation(moduleAnnotation.build())
@@ -79,17 +81,14 @@ public final class AutoModuleProcessor extends AbstractProcessor {
         return true;
     }
 
-    /*
-     * Calling instance.addsTo() throws an exception.
-     * This method get's the information needed, without making the compiler explode.
-     * Ideally I would figure out how Annotation implements toString and use that.
-     */
-    private static String getField(String fieldName, AutoModule instance) {
-        String instanceToString = instance.toString();
-        // example toString "@com.jaynewstrom.autoModule.AutoModule(addsTo=java.lang.Void)"
-        // 3 because of the @, (, and =
-        int startIndex = AutoModule.class.getName().length() + fieldName.length() + 3;
-        return instanceToString.substring(startIndex, instanceToString.length() - 1);
+    ClassName getAddsTo(AutoModule annotation) {
+        try {
+            return ClassName.get(annotation.addsTo());
+        } catch (MirroredTypeException mte) {
+            DeclaredType classTypeMirror = (DeclaredType) mte.getTypeMirror();
+            TypeElement classTypeElement = (TypeElement) classTypeMirror.asElement();
+            return ClassName.get(classTypeElement);
+        }
     }
 
     private void error(Element e, String msg, Object... args) {
